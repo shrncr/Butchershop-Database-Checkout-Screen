@@ -43,5 +43,9 @@ def Checkout(id):
     fnField.grid(row=len(items) + 2, column=1)
     cField.grid(row=len(items) + 3, column=1)
 
+    # Checkout button 
+    checkoutButton = tk.Button(root, text="Checkout")
+    checkoutButton.grid(row=len(items) + 4, column=0, columnspan=2, pady=10)
+    # add functionality
 
     root.mainloop()
