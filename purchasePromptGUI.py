@@ -1,5 +1,6 @@
 import tkinter as tk
 from transact import query
+from tkinter import messagebox
 def promptPurchase(meat, transNum):
     
     _weight = tk.IntVar() #num of lbs of {meat} user wants to buy
@@ -12,13 +13,16 @@ def promptPurchase(meat, transNum):
         w = _weight.get()
         EnterLbs.config(text="{}".format(w)) #change the label's text for user's ease 
         
-    def submit(): #if user wants to add to cart
-        if meat[2] < _weight.get(): #if they tried to add more meat than in stock, dont let them
-            pass
-        else: #if adding to cart is feasible, add meat/type to cart table
-            weight = _weight.get()
-            query("addToCart", [transNum, meat[0], weight])
-            root.destroy()
+    def submit():
+        weight = _weight.get()
+        if meat[2] < weight:  # if they tried to add more meat than in stock, don't let them
+            messagebox.showerror("Error", "Not enough stock available.")
+        else:  # if adding to cart is feasible, add meat/type to cart table
+            try:
+                query("addToCart", [transNum, meat[0], weight])
+                root.destroy()
+            except Exception as e:
+                messagebox.showerror("Error", str(e))  # Display SQL error message
 
     def leave(): #if doesnt want to add, simply destroy the popup
         root.destroy()
