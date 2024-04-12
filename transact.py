@@ -16,7 +16,7 @@ def query(type, data=None): #data param only input if it is update/insert
         meats = cursor.fetchall()
         return meats
     elif type == "addToCart": #adds entry to cart table when user taps "sumbit" button in purchasePromptGUI
-        sql = "INSERT INTO cart (transactionID, typeOfMeat, weight) VALUES (%s, %s, %s)"
+        sql = "INSERT INTO cart (cartID, transactionID, typeOfMeat, weight, purchaseID, meatID) VALUES (%s, %s, %s)"
         val = (data[0], data[1], data[2])
         cursor.execute(sql, val)
         mydb.commit()
