@@ -26,6 +26,7 @@ def Checkout(id):
     items = query("getCart", id) #loads in everything YOU added to the cart in THIS SPECIFIC transaction
 
     root = tk.Tk()
+    root.geometry("800x600")
     root.title("Purchase your meat.")
     
     total = 0

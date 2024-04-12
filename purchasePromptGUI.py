@@ -30,6 +30,7 @@ def promptPurchase(meat, transNum):
         root.destroy()
 
     root = tk.Tk()
+    root.geometry("800x600")
     root.title("Welcome to the Butcher Shop")
 
     QuestionPrompt = tk.Label(root, text="How many lbs of {} do you want to purchase?".format(meat[0])) #remind them what meat theyre buying

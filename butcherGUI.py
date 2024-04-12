@@ -14,6 +14,7 @@ def checkout():
     Checkout(str(transNum))
 
 root = tk.Tk()
+root.geometry("800x600")
 root.title("Welcome to the Butcher Shop")
 
 # Create a label widget
