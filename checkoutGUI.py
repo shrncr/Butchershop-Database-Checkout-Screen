@@ -1,7 +1,19 @@
 import tkinter as tk
 from transact import query
+import uuid
+
 
 def Checkout(id):
+    
+    meatPairs = {}
+    
+    transNum = uuid.uuid4() #purchaseID
+    def check(tot):
+        last = lName.get()
+        cardNum = card.get()
+
+        query("purchase", [str(transNum),cardNum[len(cardNum)-4:],last,tot, meatPairs])
+
     lName = tk.StringVar() #last name of purchaser
     lName.set("")
 
@@ -21,6 +33,7 @@ def Checkout(id):
         l = tk.Label(root,text="{}, {} pounds".format(item[0][1], item[0][2]))
         l.grid(sticky="w") # align to the left
         total+= item[1]
+        meatPairs[item[0][1]] = item[0][2]
 
     totalCost = tk.Label(root, text=f"Total: ${total:.2f}")
     totalCost.grid(sticky='w')
@@ -44,7 +57,7 @@ def Checkout(id):
     cField.grid(row=len(items) + 3, column=1)
 
     # Checkout button 
-    checkoutButton = tk.Button(root, text="Checkout")
+    checkoutButton = tk.Button(root, text="Checkout", command= lambda t = total :check(t))
     checkoutButton.grid(row=len(items) + 4, column=0, columnspan=2, pady=10)
     # add functionality
 

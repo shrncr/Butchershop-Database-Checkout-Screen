@@ -1,6 +1,7 @@
 import tkinter as tk
 from transact import query
 from tkinter import messagebox
+import uuid
 def promptPurchase(meat, transNum):
     
     _weight = tk.IntVar() #num of lbs of {meat} user wants to buy
@@ -19,7 +20,8 @@ def promptPurchase(meat, transNum):
             messagebox.showerror("Error", "Not enough stock available.")
         else:  # if adding to cart is feasible, add meat/type to cart table
             try:
-                query("addToCart", [transNum, meat[0], weight])
+                cart = uuid.uuid4()
+                query("addToCart", [str(cart),transNum,meat[0],weight, None, "2"])
                 root.destroy()
             except Exception as e:
                 messagebox.showerror("Error", str(e))  # Display SQL error message
