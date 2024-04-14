@@ -1,17 +1,18 @@
 import tkinter as tk
 from transact import query
 import uuid
+import mysql.connector
 
 
 def Checkout(id):
-    
+
     meatPairs = {}
     
-    transNum = uuid.uuid4() #purchaseID
     def check(tot):
+        transNum = uuid.uuid4() #purchaseID
         last = lName.get()
         cardNum = card.get()
-
+        print("Debug Info:", str(transNum), cardNum[-4:], last, tot)  # Debug output
         query("purchase", [str(transNum),cardNum[len(cardNum)-4:],last,tot, meatPairs])
 
     lName = tk.StringVar() #last name of purchaser
@@ -60,6 +61,6 @@ def Checkout(id):
     # Checkout button 
     checkoutButton = tk.Button(root, text="Checkout", command= lambda t = total :check(t))
     checkoutButton.grid(row=len(items) + 4, column=0, columnspan=2, pady=10)
-    # add functionality
+
 
     root.mainloop()

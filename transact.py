@@ -23,7 +23,8 @@ def query(type, data=None): #data param only input if it is update/insert
         
     elif type=="purchase": #adds to purchase table when a user fully checks out in checkoutGUI
         sql = "INSERT INTO Payment (purchaseID, lastFourDigits, lastNameOnCard, total) VALUES (%s, %s, %s, %s)"
-        val = (data[0], data[1], data[2], data[3])
+        val = (data[0], str(data[1]), data[2], data[3])
+        print("Attempting to insert:", val)
         cursor.execute(sql, val)
         for meat in data[4]:
             sql = "UPDATE Meat SET lbsRemaining=lbsRemaining-{} WHERE typeOfMeat ={}".format(meat, data[4][meat])#decreases meats(key) by #lbs purchased (val)
