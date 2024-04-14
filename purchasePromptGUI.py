@@ -10,7 +10,8 @@ def promptPurchase(meat, transNum):
         if isAdding:
             _weight.set(_weight.get() +1)
         else:
-            _weight.set(_weight.get() -1)
+            if _weight.get() > 0:
+                _weight.set(_weight.get() -1)
         w = _weight.get()
         EnterLbs.config(text="{}".format(w)) #change the label's text for user's ease 
         
@@ -32,24 +33,26 @@ def promptPurchase(meat, transNum):
     root = tk.Tk()
     root.geometry("800x600")
     root.title("Welcome to the Butcher Shop")
+    root.configure(background="white")
+    root.attributes('-fullscreen',True)
 
-    QuestionPrompt = tk.Label(root, text="How many lbs of {} do you want to purchase?".format(meat[0])) #remind them what meat theyre buying
-    lbsLeftNote = tk.Label(root, text="By the way, we only have {} lbs .".format(meat[2])) #let them know how much is left
+    QuestionPrompt = tk.Label(root,bg="white", font=("system",50), fg="black", text="How many lbs of {} do you want to purchase?".format(meat[0])) #remind them what meat theyre buying
+    lbsLeftNote = tk.Label(root, bg="white",font=("system",50), fg="black",text="By the way, we only have {} lbs .".format(meat[2])) #let them know how much is left
 
-    subtButton = tk.Button(root, text="-", command=lambda:setWeight(0)) #to indicate number of pounds they wanna purchase
-    EnterLbs = tk.Label(root, text="0")
-    addButton = tk.Button(root, text="+", command=lambda:setWeight(1))
+    subtButton = tk.Button(root, text="-", font=("system",20),bg="black", fg="white",command=lambda:setWeight(0)) #to indicate number of pounds they wanna purchase
+    EnterLbs = tk.Label(root, bg="white",font=("system",75),text="0")
+    addButton = tk.Button(root, text="+",bg="black", font=("system",20),fg="white", command=lambda:setWeight(1))
 
-    AddToCart= tk.Button(root, text="Add to cart", command=lambda:submit())
-    Cancel = tk.Button(root, text="Cancel", command= lambda:leave())
+    AddToCart= tk.Button(root, text="Add to cart",bg="green",fg="white",font=("system",20), command=lambda:submit())
+    Cancel = tk.Button(root, text="Cancel", bg="red", fg="white",font=("system",20),command= lambda:leave())
     
-    QuestionPrompt.pack(pady=10)
-    lbsLeftNote.pack(pady=10)
-    subtButton.pack()
-    addButton.pack()
-    EnterLbs.pack()
-    Cancel.pack()
-    AddToCart.pack()
+    QuestionPrompt.pack(side="top", fill="y", expand=True)
+    lbsLeftNote.pack(side="top", fill="y", expand=True)
+    subtButton.pack(side="left", fill="x", expand=True)
+    addButton.pack(side="right", fill="x", expand=True)
+    EnterLbs.pack(side="top", fill="both", expand=True)
+    Cancel.pack(side="left", fill="y", expand=True)
+    AddToCart.pack(side="right", fill="y", expand=True)
 
 
     root.mainloop()

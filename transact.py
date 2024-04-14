@@ -6,7 +6,7 @@ def query(type, data=None): #data param only input if it is update/insert
     mydb = mysql.connector.connect(
         host = "localhost",
         user = "root",
-        password = "Gumball80",
+        password = "Kiki1979!",
         database = "BUTCHERSHOP"
     )
     cursor = mydb.cursor()
@@ -26,8 +26,13 @@ def query(type, data=None): #data param only input if it is update/insert
         val = (data[0], str(data[1]), data[2], data[3])
         print("Attempting to insert:", val)
         cursor.execute(sql, val)
+        print(data[4])
         for meat in data[4]:
-            sql = "UPDATE Meat SET lbsRemaining=lbsRemaining-{} WHERE typeOfMeat ={}".format(meat, data[4][meat])#decreases meats(key) by #lbs purchased (val)
+            print(meat + "meat")
+            print(data[4][meat])
+            sql = "UPDATE Meat SET lbsRemaining=lbsRemaining-%s WHERE typeOfMeat =%s"
+            values = (data[4][meat],meat)#decreases meats(key) by #lbs purchased (val)
+            cursor.execute(sql, values)
         print("thanks.")
         #note: doesnt work bc it will have to decrease each meat which was purchased
         #probs have to use a for loop to make sure we get rid of each meat. idk. we have a whole week left to do this.

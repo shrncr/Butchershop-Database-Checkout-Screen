@@ -1,19 +1,34 @@
 import tkinter as tk
 from transact import query
 import uuid
+from PIL import Image, ImageTk
 import mysql.connector
-
+from time import sleep
+tip = Image.open('topme.png')
 
 def Checkout(id):
 
+
     meatPairs = {}
     
+    def on_field_select(entry):
+        print(entry)
+        selectedField = entry
+    def add_text(let):
+        field= root.focus_get()
+        if field:
+            field.insert(tk.END, let)
     def check(tot):
         transNum = uuid.uuid4() #purchaseID
-        last = lName.get()
-        cardNum = card.get()
-        print("Debug Info:", str(transNum), cardNum[-4:], last, tot)  # Debug output
+        last = lnField.get()
+        cardNum = cField.get()
+        print(cardNum)
+        print("Debug Info:", str(transNum), cardNum[len(cardNum)-4:], last, tot)  # Debug output
         query("purchase", [str(transNum),cardNum[len(cardNum)-4:],last,tot, meatPairs])
+        
+
+        root.destroy()
+        
 
     lName = tk.StringVar() #last name of purchaser
     lName.set("")
@@ -29,37 +44,53 @@ def Checkout(id):
     root = tk.Tk()
     root.geometry("800x600")
     root.title("Purchase your meat.")
+    root.configure(background="white")
+    root.attributes('-fullscreen',True)
     
     total = 0
     for item in items: 
-        l = tk.Label(root,text="{}, {} pounds".format(item[0][1], item[0][2]))
+        l = tk.Label(root,bg="white", font=("system",80), fg="black",text="{}, {} pounds".format(item[0][2], item[0][3]))
         l.grid(sticky="w") # align to the left
         total+= item[1]
-        meatPairs[item[0][1]] = item[0][2]
+        meatPairs[item[0][2]] = item[0][3]
+        print(meatPairs)
 
-    totalCost = tk.Label(root, text=f"Total: ${total:.2f}")
+    totalCost = tk.Label(root,bg="white", font=("system",100), fg="black", text=f"Total: ${total:.2f}")
     totalCost.grid(sticky='w')
 
-    # Labels for the entry fields
-    lnLabel = tk.Label(root, text="Last Name:")
-    fnLabel = tk.Label(root, text="First Name:")
-    cLabel = tk.Label(root, text="Card Number:")
+    #alphabet buttons
+    characters = "abcdefghijklmnopqrstuvwxyz0123456789"
+    num=11
+    for char in characters:
+        b = tk.Button(root,bg="white", font=("system",50), fg="black", text=char, command=lambda l=char: add_text(l))
+        b.grid(row=(num%6)+1, column=(num//6)+7, sticky='e')
+        num+=1
 
-    lnLabel.grid(row=len(items) + 1, column=0, sticky='e')
-    fnLabel.grid(row=len(items) + 2, column=0, sticky='e')
+    # Labels for the entry fields
+    lnLabel = tk.Label(root,bg="white", font=("system",40), fg="black", text="Last Initial")
+    fnLabel = tk.Label(root,bg="white", font=("system",40), fg="black", text="First Initial:")
+    cLabel = tk.Label(root,bg="white", font=("system",40), fg="black", text="Card Number:")
+
+    lnLabel.grid(row=len(items) + 1, column=0,sticky='e')
+    fnLabel.grid(row=len(items) + 2, column=0,sticky='e')
     cLabel.grid(row=len(items) + 3, column=0, sticky='e')
 
     # Entry fields
-    lnField = tk.Entry(root, textvariable=lName)
-    fnField = tk.Entry(root, textvariable=fName)
-    cField = tk.Entry(root, textvariable=card)
+    lnField = tk.Entry(root,bg="white", font=("system",40), fg="black", textvariable=lName)
+    fnField = tk.Entry(root,bg="white", font=("system",40), fg="black", textvariable=fName)
+    cField = tk.Entry(root,bg="white", font=("system",40), fg="black", textvariable=card)
 
-    lnField.grid(row=len(items) + 1, column=1)
-    fnField.grid(row=len(items) + 2, column=1)
-    cField.grid(row=len(items) + 3, column=1)
+    lnField.bind("<FocusIn>", lambda event: on_field_select(entry =lnField))
+    fnField.bind("<FocusIn>", lambda event: on_field_select(entry =fnField))
+    cField.bind("<FocusIn>", lambda event: on_field_select(entry =cField))
 
+    lnField.grid(row=len(items) + 1, column=1,columnspan=6)
+    fnField.grid(row=len(items) + 2, column=1,columnspan=6)
+    cField.grid(row=len(items) + 3, column=1, columnspan=6)
+
+    selectedField = None
     # Checkout button 
-    checkoutButton = tk.Button(root, text="Checkout", command= lambda t = total :check(t))
+    checkoutButton = tk.Button(root, text="Checkout",bg="white", font=("system",20), fg="black", command= lambda t = total :check(t))
     checkoutButton.grid(row=len(items) + 4, column=0, columnspan=2, pady=10)
 
 
