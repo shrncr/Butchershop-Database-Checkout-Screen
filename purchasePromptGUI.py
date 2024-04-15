@@ -3,6 +3,8 @@ from transact import query
 from tkinter import messagebox
 import uuid
 def promptPurchase(meat, transNum):
+    meat = (query("specMeat", [meat[0]]))[0]
+    print(meat)
     
     _weight = tk.IntVar() #num of lbs of {meat} user wants to buy
     _weight.set(0)
