@@ -26,8 +26,15 @@ def Checkout(id):
         print("Debug Info:", str(transNum), cardNum[len(cardNum)-4:], last, tot)  # Debug output
         query("purchase", [str(transNum),cardNum[len(cardNum)-4:],last,tot, meatPairs])
         
+    # Clear all widgets
+        for widget in root.winfo_children():
+            widget.destroy()
+       # Display success message
+        success_message = tk.Label(root, text="Thank you!", font=("system", 40), fg="black")
+        success_message.pack(pady=200)  # Centers the message in the window
 
-        root.destroy()
+        # Schedule window to close after 6000 milliseconds (6 seconds)
+        root.after(6000, root.destroy)
         
 
     lName = tk.StringVar() #last name of purchaser

@@ -6,7 +6,7 @@ def query(type, data=None): #data param only input if it is update/insert
     mydb = mysql.connector.connect(
         host = "localhost",
         user = "root",
-        password = "Kiki1979!",
+        password = "Gumball80",
         database = "BUTCHERSHOP"
     )
     cursor = mydb.cursor()
