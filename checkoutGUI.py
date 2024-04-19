@@ -63,13 +63,12 @@ def Checkout(id):
     totalCost = tk.Label(root,bg="white", font=("system",100), fg="black", text=f"Total: ${total:.2f}")
     totalCost.grid(sticky='w')
 
-    #alphabet buttons
     characters = "abcdefghijklmnopqrstuvwxyz0123456789"
-    num=11
-    for char in characters:
-        b = tk.Button(root,bg="white", font=("system",50), fg="black", text=char, command=lambda l=char: add_text(l))
-        b.grid(row=(num%6)+1, column=(num//6)+7, sticky='e')
-        num+=1
+    button_frame = tk.Frame(root, bg="white")
+    button_frame.grid(row=len(items)+1, column=13, columnspan=8)
+    for idx, char in enumerate(characters):
+        b = tk.Button(button_frame, bg="white", font=("system", 20), fg="black", text=char, command=lambda l=char: add_text(l))
+        b.grid(row=(idx//10), column=(idx%10))  # Arranged in a 10x5 grid
 
     # Labels for the entry fields
     lnLabel = tk.Label(root,bg="white", font=("system",40), fg="black", text="Last Initial")
