@@ -1,10 +1,8 @@
 import tkinter as tk
 from transact import query
 import uuid
-from PIL import Image, ImageTk
 import mysql.connector
 from time import sleep
-tip = Image.open('topme.png')
 
 def Checkout(id):
 

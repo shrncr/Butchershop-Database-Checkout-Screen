@@ -41,17 +41,17 @@ def promptPurchase(meat, transNum):
     QuestionPrompt = tk.Label(root,bg="white", font=("system",50), fg="black", text="How many lbs of {} do you want to purchase?".format(meat[0])) #remind them what meat theyre buying
     lbsLeftNote = tk.Label(root, bg="white",font=("system",50), fg="black",text="By the way, we only have {} lbs .".format(meat[2])) #let them know how much is left
 
-    subtButton = tk.Button(root, text="-", font=("system",20),bg="black", fg="white",command=lambda:setWeight(0)) #to indicate number of pounds they wanna purchase
-    EnterLbs = tk.Label(root, bg="white",font=("system",75),text="0")
-    addButton = tk.Button(root, text="+",bg="black", font=("system",20),fg="white", command=lambda:setWeight(1))
+    subtButton = tk.Button(root, text="-", font=("arial",200),bg="black", fg="white",command=lambda:setWeight(0)) #to indicate number of pounds they wanna purchase
+    EnterLbs = tk.Label(root, bg="white",font=("system",400),text="0")
+    addButton = tk.Button(root, text="+",bg="black", font=("arial",200),fg="white", command=lambda:setWeight(1))
 
-    AddToCart= tk.Button(root, text="Add to cart",bg="green",fg="white",font=("system",20), command=lambda:submit())
-    Cancel = tk.Button(root, text="Cancel", bg="red", fg="white",font=("system",20),command= lambda:leave())
+    AddToCart= tk.Button(root, text="Add to cart",bg="green",fg="white",font=("system",50), command=lambda:submit())
+    Cancel = tk.Button(root, text="Cancel", bg="red", fg="white",font=("system",50),command= lambda:leave())
     
     QuestionPrompt.pack(side="top", fill="y", expand=True)
     lbsLeftNote.pack(side="top", fill="y", expand=True)
-    subtButton.pack(side="left", fill="x", expand=True)
-    addButton.pack(side="right", fill="x", expand=True)
+    subtButton.pack(side="left", fill="both", expand=True)
+    addButton.pack(side="right", fill="both", expand=True)
     EnterLbs.pack(side="top", fill="both", expand=True)
     Cancel.pack(side="left", fill="y", expand=True)
     AddToCart.pack(side="right", fill="y", expand=True)
