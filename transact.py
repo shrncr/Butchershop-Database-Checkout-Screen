@@ -1,61 +1,59 @@
 '''
 Queries associated w the butchershop
 '''
-import mysql.connector
-def query(type, data=None): #data param only input if it is update/insert     
-    mydb = mysql.connector.connect(
-        host = "localhost",
-        user = "root",
-        password = "Gumball80",
-        database = "BUTCHERSHOP"
-    )
-    cursor = mydb.cursor()
+from pymongo import MongoClient
 
-    if type=="getMeat": #get available meat in the butchershop
-        cursor.execute("SELECT typeOfMeat,pricePerPound,lbsRemaining from Meat WHERE lbsRemaining>0")
-        meats = cursor.fetchall()
+def connect_mongo():
+    client = MongoClient("mongodb://localhost:27017/")  
+    db = client.BUTCHERSHOP  
+    return db
+
+def query(type, data=None):
+    db = connect_mongo()
+    
+    if type == "getMeat":
+        meats = list(db.Meat.find({"lbsRemaining": {"$gt": 0}}, {"_id": 0, "typeOfMeat": 1, "pricePerPound": 1, "lbsRemaining": 1}))
         return meats
-    if type=="specMeat":
-        sql = ("SELECT typeOfMeat,pricePerPound,lbsRemaining from Meat WHERE typeOfMeat = %s")
-        val = [data[0]]
-        cursor.execute(sql,val)
-        meat = cursor.fetchall()
+
+    elif type == "specMeat":
+        meat = list(db.Meat.find({"typeOfMeat": data[0]}, {"_id": 0, "typeOfMeat": 1, "pricePerPound": 1, "lbsRemaining": 1}))
         return meat
 
-    elif type == "addToCart": #adds entry to cart table when user taps "sumbit" button in purchasePromptGUI
-        sql = "INSERT INTO cart (cartID,transactionID, typeOfMeat, weight, purchaseID, meatID) VALUES (%s, %s,%s,%s,%s,%s )"
-        val = (data[0], data[1], data[2],data[3],data[4],data[5])
-        cursor.execute(sql, val)
-        mydb.commit()
-        
-    elif type=="purchase": #adds to purchase table when a user fully checks out in checkoutGUI
-        sql = "INSERT INTO Payment (purchaseID, lastFourDigits, lastNameOnCard, total) VALUES (%s, %s, %s, %s)"
-        val = (data[0], str(data[1]), data[2], data[3])
-        print("Attempting to insert:", val)
-        cursor.execute(sql, val)
-        print(data[4])
-        for meat in data[4]:
-            print(meat + "meat")
-            print(data[4][meat])
-            sql = "UPDATE Meat SET lbsRemaining=lbsRemaining-%s WHERE typeOfMeat =%s"
-            values = (data[4][meat],meat)#decreases meats(key) by #lbs purchased (val)
-            cursor.execute(sql, values)
-        print("thanks.")
-        #note: doesnt work bc it will have to decrease each meat which was purchased
-        #probs have to use a for loop to make sure we get rid of each meat. idk. we have a whole week left to do this.
 
-        mydb.commit()
-    elif type=="getCart":#gets items you added to the cart just now
-        cursor.execute("SELECT * FROM cart WHERE transactionID LIKE %s", ([data + "%"]))
-        cart = cursor.fetchall()
+    elif type == "addToCart":
+        cart = {
+            "cartID": data[0],
+            "transactionID": data[1],
+            "typeOfMeat": data[2],
+            "weight": data[3],
+            "purchaseID": data[4],
+            "meatID": data[5]
+        }
+        db.cart.insert_one(cart)
+
+        
+    elif type == "purchase":
+        payment = {
+            "purchaseID": data[0],
+            "lastFourDigits": data[1],
+            "lastNameOnCard": data[2],
+            "total": data[3]
+        }
+        db.Payment.insert_one(payment)
+        
+        for meat, weight in data[4].items(): # update lbsRemaining 
+            db.Meat.update_one({"typeOfMeat": meat}, {"$inc": {"lbsRemaining": -weight}})
+
+
+    elif type == "getCart":
+        cart_items = list(db.cart.find({"transactionID": {"$regex": data + ".*"}}, {"_id": 0}))
+        
         newList = []
-        for item in cart:
-            cursor.execute("SELECT pricePerPound FROM Meat WHERE typeOfMeat = %s", ([item[2]])) #we have to figure out how much money worth of each meat was added
-            costs = cursor.fetchall() #price per pound
-            total = int(costs[0][0])*int(item[3]) #total aka p/lbXpounds
-            newEntry = [item, total] #an array containing 2 elements: the original tuple, and the total cost of this cart item. sigh.
-             #turn into tuple
-            newList.append(newEntry)
+        for item in cart_items:
+            meat_data = db.Meat.find_one({"typeOfMeat": item["typeOfMeat"]}, {"pricePerPound": 1, "_id": 0})
+            total = meat_data["pricePerPound"] * item["weight"]
+            newList.append((item, total))
         return newList
+
     
 

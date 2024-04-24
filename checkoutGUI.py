@@ -1,7 +1,6 @@
 import tkinter as tk
 from transact import query
 import uuid
-import mysql.connector
 from time import sleep
 
 def Checkout(id):

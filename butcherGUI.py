@@ -1,5 +1,4 @@
 import tkinter as tk
-import mysql.connector
 import purchasePromptGUI 
 from checkoutGUI import Checkout
 from transact import query
