@@ -3,7 +3,7 @@ from transact import query
 from tkinter import messagebox
 import uuid
 def promptPurchase(meat, transNum):
-    meat = (query("specMeat", [meat[0]]))[0]
+    meat = (query("specMeat", [meat]))
     print(meat)
     
     _weight = tk.IntVar() #num of lbs of {meat} user wants to buy
@@ -19,12 +19,12 @@ def promptPurchase(meat, transNum):
         
     def submit():
         weight = _weight.get()
-        if meat[2] < weight:  # if they tried to add more meat than in stock, don't let them
+        if meat['lbsRemaining'] < weight:  # if they tried to add more meat than in stock, don't let them
             messagebox.showerror("Error", "Not enough stock available.")
         else:  # if adding to cart is feasible, add meat/type to cart table
             try:
                 cart = uuid.uuid4()
-                query("addToCart", [str(cart),transNum,meat[0],weight, None, "2"])
+                query("addToCart", [str(cart),transNum,meat['typeOfMeat'],weight, None, "2"])
                 root.destroy()
             except Exception as e:
                 messagebox.showerror("Error", str(e))  # Display SQL error message
@@ -38,8 +38,8 @@ def promptPurchase(meat, transNum):
     root.configure(background="white")
     root.attributes('-fullscreen',True)
 
-    QuestionPrompt = tk.Label(root,bg="white", font=("system",50), fg="black", text="How many lbs of {} do you want to purchase?".format(meat[0])) #remind them what meat theyre buying
-    lbsLeftNote = tk.Label(root, bg="white",font=("system",50), fg="black",text="By the way, we only have {} lbs .".format(meat[2])) #let them know how much is left
+    QuestionPrompt = tk.Label(root,bg="white", font=("system",50), fg="black", text="How many lbs of {} do you want to purchase?".format(meat['typeOfMeat'])) #remind them what meat theyre buying
+    lbsLeftNote = tk.Label(root, bg="white",font=("system",50), fg="black",text="By the way, we only have {} lbs .".format(meat['lbsRemaining'])) #let them know how much is left
 
     subtButton = tk.Button(root, text="-", font=("arial",200),bg="black", fg="white",command=lambda:setWeight(0)) #to indicate number of pounds they wanna purchase
     EnterLbs = tk.Label(root, bg="white",font=("system",400),text="0")

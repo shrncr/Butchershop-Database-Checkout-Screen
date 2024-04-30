@@ -38,7 +38,7 @@ meats=query("getMeat")#get meats available rn
 #make purchase buttons for EACH meat which is currently available
 for meat in meats:
     print(meat)
-    button= tk.Button(root,bg="white", font=("system",20), fg="black", text=meat[0], command=lambda i=meat:askWeight(i))
+    button= tk.Button(root,bg="white", font=("system",20), fg="black", text=meat['typeOfMeat'], command=lambda i=meat['typeOfMeat']:askWeight(i))
     button.pack(side="top", fill="both",expand=True,pady=8)
 
     
