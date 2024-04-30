@@ -1,10 +1,8 @@
 import tkinter as tk
-import mysql.connector
 import purchasePromptGUI 
 from checkoutGUI import Checkout
 from transact import query
 import uuid
-
 transNum = uuid.uuid4() #To identify whose items are in whose cart
 def askWeight(type): #brings up promptPurchase gui for selected meat
 

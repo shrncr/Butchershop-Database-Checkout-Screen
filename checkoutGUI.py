@@ -1,7 +1,6 @@
 import tkinter as tk
 from transact import query
 import uuid
-import mysql.connector
 from time import sleep
 
 def Checkout(id):
@@ -64,7 +63,6 @@ def Checkout(id):
     totalCost = tk.Label(root,bg="white", font=("system",100), fg="black", text=f"Total: ${total:.2f}")
     totalCost.grid(sticky='w')
 
-    #alphabet buttons
     characters = "abcdefghijklmnopqrstuvwxyz0123456789"
     
     button_frame = tk.Frame(root, bg="white")
